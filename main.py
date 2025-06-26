@@ -1,16 +1,12 @@
 # server.py
 from mcp.server.fastmcp import FastMCP
 from textblob import TextBlob
+from pathlib import Path
+import shutil
 
 # Create an MCP server
-mcp = FastMCP("Demo")
+mcp = FastMCP("Personal_assistant")
 
-
-# Add an addition tool
-@mcp.tool()
-def add(a: int, b: int) -> int:
-    """Add two numbers"""
-    return a + b
 
 @mcp.tool()
 def analyze_your_mood(user_text: str)-> str:
@@ -23,8 +19,6 @@ def analyze_your_mood(user_text: str)-> str:
 
      # Mood classification + suggestions
 
-    if mood < -0.25:
-        return("Just chill a little bit")
     if mood < -0.5:
         return (
             "I hear you’re having a tough time. 💙\n"
@@ -41,7 +35,63 @@ def analyze_your_mood(user_text: str)-> str:
             "Glad you’re doing okay! 🌞\n"
             "Keep up the positive energy—maybe celebrate with a small treat!"
         )
+
+@mcp.tool()
+def organize_downloads(
+    base_path: str = "~/Downloads",  # Default path (supports ~)
+    create_folders: bool = True,     # Auto-create category folders
+    dry_run: bool = False            # Test without moving files
+) -> str:
+    """
+    Organizes files in the Downloads folder by category (Images, Documents, etc.).
+    Returns a summary of changes.
+    """
+    # Expand user path (~ -> /home/user)
+    downloads_path = Path(base_path).expanduser()
     
+    # File type categories
+    categories = {
+        "Images": [".jpg", ".png", ".gif", ".webp"],
+        "Documents": [".pdf", ".docx", ".txt", ".md"],
+        "Archives": [".zip", ".rar", ".tar.gz"],
+        "Executables": [".exe", ".msi", ".deb"],
+        "Videos": [".mp4", ".mov", ".avi"]
+    }
+
+    moved_files = {}
+    ignored_files = []
+
+    for item in downloads_path.iterdir():
+        if item.is_file():
+            file_ext = item.suffix.lower()
+            moved = False
+
+            # Find matching category
+            for category, extensions in categories.items():
+                if file_ext in extensions:
+                    if create_folders:
+                        (downloads_path / category).mkdir(exist_ok=True)
+                    
+                    dest = downloads_path / category / item.name
+                    
+                    if not dry_run:
+                        shutil.move(str(item), str(dest))
+                    
+                    moved_files.setdefault(category, []).append(item.name)
+                    moved = True
+                    break
+
+            if not moved:
+                ignored_files.append(item.name)
+
+    # Generate report
+    report = [
+        f"Organized {sum(len(v) for v in moved_files.values())} files:",
+        *[f"- {cat}: {len(files)}" for cat, files in moved_files.items()],
+        f"Ignored {len(ignored_files)} unsupported files" if ignored_files else ""
+    ]
+    
+    return "\n".join(report)    
        
 
 # Add a dynamic greeting resource
