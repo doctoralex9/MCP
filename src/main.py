@@ -3,9 +3,18 @@ from mcp.server.fastmcp import FastMCP
 from textblob import TextBlob
 from pathlib import Path
 import shutil
+from fastapi import FastAPI
 
 # Create an MCP server
 mcp = FastMCP("Personal_assistant")
+
+
+app = FastAPI()
+app.mount("/mcp", mcp )#Mount mcp object on the main app by using mount() method 
+
+@app.get("/")
+async def read_root():
+    return {"message": "Welcome to MCP Personal Assistant Core! Access FastMCP at /mcp"}
 
 
 @mcp.tool()
