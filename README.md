@@ -6,15 +6,13 @@ This project provides a custom [MCP](https://github.com/microsoft/mcp) server fo
 
 - Sentiment analysis tool
 - Downloads folder organizer
-- Personalized greeting resource
-- FastAPI + FastMCP integration
 
 ## Quick Start
 
 1. **Clone this repository**  
    ```sh
-   git clone https://github.com/yourusername/MCP-main.git
-   cd MCP-main
+   git clone https://github.com/yourusername/MCP.git
+   cd MCP
    ```
 
 2. **Install dependencies**  
@@ -35,7 +33,7 @@ This project provides a custom [MCP](https://github.com/microsoft/mcp) server fo
            "mcp[cli]",
            "mcp",
            "run",
-           "c:\\Users\\<YourUser>\\Desktop\\MCP-main\\src\\main.py"
+           "c:\\Users\\<YourUser>\\Desktop\\MCP\\src\\main.py"
          ],
          "url": "http://localhost:8000/mcp"
        }
