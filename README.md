@@ -23,9 +23,7 @@ This project provides a custom [MCP](https://github.com/microsoft/mcp) server fo
    ```
 
 3. **Configure Claude Desktop**  
-   Edit (or create)  
-   `C:\Users\<YourUser>\AppData\Roaming\Claude\claude_desktop_config.json`  
-   and add:
+   In the Claude Desktop app, click the menu icon (☰) in the top-left corner. Navigate to File > Settings, then select Edit Config to open the claude_desktop_config.json file. Add the following configuration:
    ```json
    {
      "mcpServers": {
@@ -48,11 +46,9 @@ This project provides a custom [MCP](https://github.com/microsoft/mcp) server fo
 
 4. **Start Claude Desktop**  
    Launch the Claude Desktop app.  
-   The MCP server will start automatically and be available at `/mcp`.
-
+   Click the Tools button to see your new tools available for use.
 ## Usage
 
-- Access the MCP tools and resources from within Claude Desktop.
-- Customize or extend the server by editing `src/main.py`.
+Interact with your new tools directly within the Claude interface. For example, you can ask Claude to use the sentiment analyzer or the folder organizer.
 
 ---
